@@ -4,4 +4,4 @@ Disallow: /login.html
 Disallow: /admin.html
 Disallow: /generar-clave.html
 
-Sitemap: https://tudominio.com/sitemap.xml
+Sitemap: https://elmerparionapardo950-a11y.github.io/FASTEC/sitemap.xml
