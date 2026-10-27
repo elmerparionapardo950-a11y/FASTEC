@@ -1,7 +1,25 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://tudominio.com/productos.html</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://tudominio.com/nosotros.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://tudominio.com/servicios.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://tudominio.com/contacto.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/</loc>
+  </url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/index.html</loc>
+  </url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/inicio.html</loc>
+  </url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/productos.html</loc>
+  </url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/nosotros.html</loc>
+  </url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/servicios.html</loc>
+  </url>
+  <url>
+    <loc>https://elmerparionapardo950-a11y.github.io/FASTEC/contacto.html</loc>
+  </url>
 </urlset>
