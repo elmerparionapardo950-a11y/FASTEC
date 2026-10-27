@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex,nofollow">
+<title>Generar contraseña | FASTEC</title><link rel="stylesheet" href="admin.css"></head>
+<body class="lg-body"><div class="lg-wrap" style="width:min(560px,92vw)">
+<form class="lg-card" id="f">
+  <h2 style="margin-top:0">Cambiar usuario / contraseña</h2>
+  <p style="font-size:14px;color:#646970">Escribe el usuario y la contraseña nuevos. Te daré una línea para pegar en <b>auth.js</b> (reemplaza la línea que empieza con <code>const FASTEC_AUTH</code>). Esta página no guarda nada. Bórrala del hosting cuando termines.</p>
+  <label>Usuario nuevo</label><input id="u" type="text" required>
+  <label>Contraseña nueva (mínimo 12 caracteres)</label><input id="p" type="password" minlength="12" required>
+  <button class="ad-btn" type="submit">Generar</button>
+  <textarea id="out" readonly rows="6" style="width:100%;margin-top:14px;font:12px monospace" hidden></textarea>
+</form></div>
+<script src="auth.js"></script>
+<script>
+document.getElementById('f').onsubmit = async e => {
+  e.preventDefault();
+  const u = document.getElementById('u').value.trim(), p = document.getElementById('p').value;
+  const salt = [...crypto.getRandomValues(new Uint8Array(8))].map(x => x.toString(16).padStart(2,'0')).join('');
+  const h = await fastecHash(u, p, salt), A = FASTEC_AUTH;
+  const o = document.getElementById('out'); o.hidden = false;
+  o.value = `const FASTEC_AUTH = {user:'${u.replace(/'/g,"\\'")}', salt:'${salt}', hash:'${h}', maxTries:${A.maxTries}, lockMinutes:${A.lockMinutes}, sessionHours:${A.sessionHours}, rememberDays:${A.rememberDays}};`;
+  o.select();
+};
+</script></body></html>

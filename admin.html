@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Panel | FASTEC</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="ad-body" hidden>
+<script src="data.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script>if(!fastecIsAdmin()){ location.replace('login.html'); } else { document.body.hidden = false; }</script>
+
+<div class="ad-shell">
+  <aside class="ad-side">
+    <div class="ad-brand"><img src="img/logo2.png" alt=""><span>FASTEC</span></div>
+    <nav class="ad-nav" id="adNav">
+      <button class="active" data-view="dash">🏠 Escritorio</button>
+      <button data-view="products">📦 Productos</button>
+      <button data-view="prices">💲 Precios</button>
+      <button data-view="services">🛠 Servicios</button>
+      <button data-view="company">🏢 Empresa</button>
+      <button data-view="publish">🚀 Publicar</button>
+    </nav>
+    <div class="ad-side-foot">
+      <a href="productos.html" target="_blank" rel="noopener">👁 Ver el sitio</a>
+      <button id="logoutBtn">⎋ Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <div class="ad-content">
+    <div class="ad-top">
+      <span>Hola, <b id="hello"></b></span>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <span id="statePill" class="ad-pill"></span>
+        <button class="ad-btn" data-goto="publish">Publicar cambios</button>
+      </div>
+    </div>
+
+    <!-- ESCRITORIO -->
+    <section class="ad-view" id="v-dash">
+      <h1>Escritorio</h1><p class="ad-lead">Resumen de tu catálogo.</p>
+      <div class="ad-cards" id="stats"></div>
+      <div class="ad-box">
+        <h2>¿Cómo se publican los cambios?</h2>
+        <p style="margin:0;font-size:14px;color:#646970">Todo lo que cambies aquí se guarda como <b>borrador</b> en este navegador. Tú lo ves en todo el sitio, pero los visitantes aún no.</p>
+        <ol>
+          <li>Agrega o edita productos y precios.</li>
+          <li>Revisa cómo se ve navegando el sitio (verás una barra verde de vista previa).</li>
+          <li>Ve a <b>Publicar</b>, descarga <code>data.js</code> y súbelo a tu hosting reemplazando el anterior.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section class="ad-view" id="v-products" hidden>
+      <h1>Productos</h1><p class="ad-lead">Agrega, edita, oculta o elimina productos.</p>
+      <div class="ad-tools">
+        <input type="search" id="pSearch" placeholder="Buscar por nombre, modelo o categoría…">
+        <select id="pCat"></select>
+        <button class="ad-btn grow" id="newProduct">+ Añadir producto</button>
+      </div>
+      <div class="ad-list" id="pList"></div>
+    </section>
+
+    <!-- PRECIOS -->
+    <section class="ad-view" id="v-prices" hidden>
+      <h1>Precios y stock</h1><p class="ad-lead">Escribe directamente en la tabla; se guarda solo al salir de cada casilla.</p>
+      <div class="ad-tools">
+        <input type="search" id="prSearch" placeholder="Buscar producto…">
+        <select id="prCat"></select>
+        <label style="font-size:14px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="prOnly"> Solo sin precio</label>
+        <span id="prCount" style="color:#646970;font-size:13px" class="grow"></span>
+      </div>
+      <div class="ad-tablewrap"><table class="ad-table">
+        <thead><tr><th>Producto</th><th>Precio (S/)</th><th>Precio anterior</th><th>Etiqueta oferta</th><th>Stock</th></tr></thead>
+        <tbody id="prBody"></tbody>
+      </table></div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="ad-view" id="v-services" hidden>
+      <h1>Servicios</h1><p class="ad-lead">Servicios que se muestran en la página Servicios.</p>
+      <div class="ad-tools"><button class="ad-btn grow" id="newService">+ Añadir servicio</button></div>
+      <div class="ad-list" id="sList"></div>
+    </section>
+
+    <!-- EMPRESA -->
+    <section class="ad-view" id="v-company" hidden>
+      <h1>Datos de la empresa</h1><p class="ad-lead">Se muestran en el pie de página y en Contacto.</p>
+      <form id="companyForm" class="ad-box ad-form" style="max-width:720px">
+        <label>Nombre<input name="name" required></label>
+        <label>Correo<input name="email" type="email" required></label>
+        <label>Teléfono / WhatsApp<input name="phone" required></label>
+        <label>Dirección<input name="address" required></label>
+        <label class="full">Descripción<textarea name="description" rows="3" required></textarea></label>
+        <div class="ad-actions"><button class="ad-btn" type="submit">Guardar</button></div>
+      </form>
+    </section>
+
+    <!-- PUBLICAR -->
+    <section class="ad-view" id="v-publish" hidden>
+      <h1>Publicar</h1><p class="ad-lead">Lleva tus cambios al sitio real.</p>
+      <div class="ad-box">
+        <h2>1. Descargar data.js</h2>
+        <p id="pubInfo" style="font-size:14px;color:#646970;margin:0 0 12px"></p>
+        <button class="ad-btn" id="pubBtn">⬇ Descargar data.js</button>
+        <p style="font-size:13px;color:#646970;margin:12px 0 0">2. Sube ese archivo a tu hosting (carpeta principal del sitio) reemplazando el <code>data.js</code> actual. Listo: los visitantes verán los cambios.</p>
+      </div>
+      <div class="ad-box">
+        <h2>Respaldo y borrador</h2>
+        <div class="ad-tools" style="margin:0">
+          <button class="ad-btn ad-btn-ghost" id="exportBtn">Exportar respaldo (.json)</button>
+          <label class="ad-btn ad-btn-ghost" style="cursor:pointer">Importar respaldo<input id="importFile" type="file" accept=".json" hidden></label>
+          <button class="ad-btn ad-btn-danger" id="discardBtn">Descartar borrador</button>
+        </div>
+        <p style="font-size:13px;color:#646970;margin:12px 0 0">“Descartar borrador” vuelve a los datos publicados actualmente en el sitio.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- MODAL PRODUCTO -->
+<div class="ad-modal" id="pModal" hidden>
+  <div class="ad-modal-card">
+    <div class="ad-modal-head"><h2 id="pTitle">Añadir producto</h2><button class="ad-x" id="pClose" aria-label="Cerrar">×</button></div>
+    <div class="ad-edit">
+      <form id="pForm" class="ad-form">
+        <label class="full">Nombre del producto<input name="name" required></label>
+        <label>Categoría<input name="category" list="catList" required></label>
+        <label>Modelo<input name="model" required></label>
+        <label>Precio (S/)<input name="price" inputmode="decimal" placeholder="Ej. 159.90"></label>
+        <label>Precio anterior (S/)<input name="oldPrice" inputmode="decimal" placeholder="Ej. 189.90"></label>
+        <label>Etiqueta de oferta<input name="offer" placeholder="Vacío = se calcula sola"></label>
+        <label>Stock<input name="stock" type="number" min="0" placeholder="Ej. 5"></label>
+        <label class="full">Imagen
+          <input name="imageFile" type="file" accept="image/*">
+          <small>Se reduce automáticamente. Para un sitio más liviano, sube la foto a la carpeta <code>img/</code> y escribe aquí su ruta (ej. <code>img/camara1.jpg</code>) o una URL:</small>
+          <input name="image" placeholder="img/camara1.jpg  ·  https://…">
+        </label>
+        <label class="chk full"><input name="featured" type="checkbox"> Mostrar como destacado en Inicio</label>
+        <label class="chk full"><input name="active" type="checkbox" checked> Visible en la página</label>
+        <div class="ad-actions"><button type="button" class="ad-btn ad-btn-ghost" id="pCancel">Cancelar</button><button class="ad-btn" type="submit">Guardar producto</button></div>
+      </form>
+      <aside class="ad-preview"><h4>Así se verá en la página</h4><div id="pPreview" class="catalog-grid" style="grid-template-columns:1fr"></div></aside>
+    </div>
+  </div>
+</div>
+<datalist id="catList"></datalist>
+
+<!-- MODAL SERVICIO -->
+<div class="ad-modal" id="sModal" hidden>
+  <div class="ad-modal-card narrow">
+    <div class="ad-modal-head"><h2 id="sTitle">Añadir servicio</h2><button class="ad-x" id="sClose" aria-label="Cerrar">×</button></div>
+    <form id="sForm" class="ad-form">
+      <label class="full">Nombre<input name="name" required></label>
+      <label>Categoría<input name="category" required></label>
+      <label>Ícono<input name="icon" maxlength="2" placeholder="✓"></label>
+      <label class="full">Descripción<textarea name="description" rows="4" required></textarea></label>
+      <div class="ad-actions"><button type="button" class="ad-btn ad-btn-ghost" id="sCancel">Cancelar</button><button class="ad-btn" type="submit">Guardar servicio</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

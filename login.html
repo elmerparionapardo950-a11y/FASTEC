@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Acceder | FASTEC</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="lg-body">
+<div class="lg-wrap">
+  <a class="lg-logo" href="productos.html" title="Ir al sitio"><img src="img/logo2.png" alt="FASTEC"></a>
+  <div id="lgError" class="lg-error" hidden role="alert"></div>
+  <form id="lgForm" class="lg-card" autocomplete="on">
+    <label for="lgUser">Nombre de usuario</label>
+    <input id="lgUser" type="text" autocomplete="username" autocapitalize="none" required autofocus>
+    <label for="lgPass">Contraseña</label>
+    <div class="lg-pass">
+      <input id="lgPass" type="password" autocomplete="current-password" required>
+      <button type="button" id="lgEye" aria-label="Mostrar contraseña">👁</button>
+    </div>
+    <div class="lg-row">
+      <label><input type="checkbox" id="lgRemember"> Recuérdame</label>
+      <button class="ad-btn" id="lgBtn" type="submit">Acceder</button>
+    </div>
+  </form>
+  <p class="lg-links"><a href="productos.html">← Ir a FASTEC</a></p>
+</div>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script>
+(function(){
+  if(fastecIsAdmin()){ location.replace('admin.html'); return; }
+  const $ = id => document.getElementById(id), A = FASTEC_AUTH, KEY = 'fastec_fail';
+  const showErr = m => { $('lgError').innerHTML = m; $('lgError').hidden = false; };
+  const state = () => { try{ return JSON.parse(localStorage.getItem(KEY) || '{"n":0,"until":0}'); }catch(e){ return {n:0, until:0}; } };
+  $('lgEye').onclick = () => { const p = $('lgPass'); p.type = p.type === 'password' ? 'text' : 'password'; };
+
+  $('lgForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const st = state();
+    if(st.until > Date.now()){ showErr('<strong>Acceso bloqueado.</strong> Demasiados intentos. Inténtalo de nuevo en ' + Math.ceil((st.until - Date.now())/60000) + ' min.'); return; }
+    $('lgBtn').disabled = true; $('lgError').hidden = true;
+    try{
+      const u = $('lgUser').value.trim();
+      const h = await fastecHash(u, $('lgPass').value, A.salt);
+      if(u.toLowerCase() === A.user.toLowerCase() && h === A.hash){
+        localStorage.removeItem(KEY);
+        fastecSetSession(A.user, $('lgRemember').checked, A.sessionHours, A.rememberDays);
+        location.replace('admin.html'); return;
+      }
+      st.n++;
+      if(st.n >= A.maxTries){ st.until = Date.now() + A.lockMinutes*60000; st.n = 0; showErr('<strong>Acceso bloqueado</strong> por ' + A.lockMinutes + ' minutos tras varios intentos fallidos.'); }
+      else showErr('<strong>Error:</strong> usuario o contraseña incorrectos. Intentos restantes: ' + (A.maxTries - st.n) + '.');
+      localStorage.setItem(KEY, JSON.stringify(st));
+      $('lgPass').value = ''; $('lgPass').focus();
+    }catch(err){ showErr('<strong>Error:</strong> ' + err.message); }
+    setTimeout(() => $('lgBtn').disabled = false, 700);
+  });
+})();
+</script>
+</body>
+</html>

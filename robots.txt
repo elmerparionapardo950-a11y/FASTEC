@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /admin.html
+Disallow: /generar-clave.html
+
+Sitemap: https://tudominio.com/sitemap.xml
