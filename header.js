@@ -5,14 +5,14 @@
   <div class="wrap header-inner">
     <a href="productos.html" class="brand" aria-label="FASTEC - Productos">
       <span class="brand-mark">
-        <img src="img/logo2.png" alt="">
+        <img src="img/logo3.png" alt="">
       </span>
       <span class="brand-name"></span>
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Navegación principal">
-      <a href="nosotros.html" data-page="nosotros.html">Nosotros</a>
       <a href="productos.html" data-page="productos.html">Productos</a>
+      <a href="nosotros.html" data-page="nosotros.html">Nosotros</a>
       <a href="servicios.html" data-page="servicios.html">Servicios</a>
       <a href="contacto.html" data-page="contacto.html">Contacto</a>
     </nav>
