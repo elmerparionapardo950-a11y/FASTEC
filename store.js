@@ -56,7 +56,7 @@
     const sn = Number(p.stock);
     const stock = hasStock ? (sn <= 0 ? 'Agotado' : (sn <= 3 ? 'Últimas unidades' : 'Disponible')) : '';
     const stockCls = hasStock ? (sn <= 0 ? 'out' : (sn <= 3 ? 'low' : 'in')) : '';
-    return `<article class="catalog-card live-product-card" data-product-name="${e(p.name)}" role="button" tabindex="0" title="Consultar ${e(p.name)} por WhatsApp">
+    return `<article class="catalog-card live-product-card" data-product-id="${e(p.id)}" data-product-name="${e(p.name)}" role="button" tabindex="0" title="Consultar ${e(p.name)} por WhatsApp">
       ${badge ? `<span class="product-badge">${e(badge)}</span>` : ''}
       <div class="catalog-photo live-photo">${img}</div>
       <span class="catalog-name">${e(p.name)}</span>

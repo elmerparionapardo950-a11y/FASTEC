@@ -1,5 +1,5 @@
 /* FASTEC - funciones comunes del sitio público:
-   botón flotante de WhatsApp, redes y horario en el pie, formulario de contacto,
+   botón flotante de WhatsApp, redes y horario en el pie, horario en Contacto,
    enlace "saltar al contenido".
    >>> EDITA AQUÍ los datos de redes sociales y horario. Lo que dejes vacío no se muestra. <<< */
 (function(){
@@ -16,7 +16,6 @@
 
   const company = (typeof getSiteData === 'function' ? (getSiteData().company || {}) : {});
   const digits = String(company.phone || '').replace(/\D/g, '') || SITE.whatsapp;
-  const email = company.email || 'fastec0224@gmail.com';
   const wa = (txt) => `https://wa.me/${digits}?text=${encodeURIComponent(txt)}`;
   const esc = (typeof fastecEsc === 'function') ? fastecEsc : (s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])));
 
@@ -62,38 +61,9 @@
       }
     });
 
-    /* Página de contacto: horario y redes */
-    const list = document.querySelector('.store-list');
-    if(list && SITE.hours){
-      const li = document.createElement('li'); li.innerHTML = '<strong>Horario</strong> — ' + esc(SITE.hours); list.appendChild(li);
-    }
-    const soc = socialHtml(), box = document.getElementById('contactSocial');
-    if(box && soc) box.innerHTML = '<p class="kicker">Síguenos</p>' + soc;
-
-    /* Formulario de contacto (abre WhatsApp o correo con el mensaje armado) */
-    const form = document.getElementById('contactForm');
-    if(form){
-      const out = document.getElementById('cfStatus');
-      const read = () => {
-        const v = n => (form.elements[n].value || '').trim();
-        const lines = [`Hola, soy ${v('nombre')}.`, `Motivo: ${v('motivo')}`, '', v('mensaje'), ''];
-        if(v('telefono')) lines.push('Mi teléfono: ' + v('telefono'));
-        if(v('correo')) lines.push('Mi correo: ' + v('correo'));
-        return {text: lines.join('\n'), motivo: v('motivo')};
-      };
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        if(!form.reportValidity()) return;
-        window.open(wa(read().text), '_blank', 'noopener');
-        out.textContent = 'Se abrió WhatsApp con tu mensaje listo. Solo presiona enviar.';
-      });
-      document.getElementById('cfMail').addEventListener('click', () => {
-        if(!form.reportValidity()) return;
-        const r = read();
-        location.href = `mailto:${email}?subject=${encodeURIComponent('Consulta web: ' + r.motivo)}&body=${encodeURIComponent(r.text)}`;
-        out.textContent = 'Se abrió tu programa de correo con el mensaje listo.';
-      });
-    }
+    /* Página de contacto: horario */
+    const hoursEl = document.getElementById('contactHours');
+    if(hoursEl && SITE.hours) hoursEl.textContent = SITE.hours;
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
