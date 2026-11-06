@@ -229,10 +229,10 @@ h3{font-size:20px; line-height:1.2;}
 @media (max-width:768px){
   .header-inner{height:68px;}
   .brand-mark, .brand-mark img{
-    width:150px;
-    height:52px;
-    max-width:150px;
-    max-height:52px;
+    width:165px;
+    height:57px;
+    max-width:165px;
+    max-height:57px;
   }
   .brand-name{font-size:16px;}
   .nav-toggle{display:flex;}
@@ -265,7 +265,7 @@ h3{font-size:20px; line-height:1.2;}
   }
 }
 @media (max-width:360px){
-  .brand-mark, .brand-mark img{width:128px;height:46px;max-width:128px;max-height:46px;}
+  .brand-mark, .brand-mark img{width:140px;height:49px;max-width:140px;max-height:49px;}
 }
 
 
@@ -345,11 +345,12 @@ h3{font-size:20px; line-height:1.2;}
 }
 .page-hero-nosotros .page-hero-inner{position:relative;z-index:2;width:100%;}
 @media (max-width:680px){
-  /* celular: el video se ve completo arriba y el texto va debajo, sin taparlo */
-  .page-hero-nosotros{display:block;height:auto;min-height:0;padding:0;}
-  .page-hero-nosotros .hero-video{position:relative;inset:auto;display:block;width:100%;height:auto;aspect-ratio:16/9;}
-  .page-hero-nosotros::before{display:none;}
-  .page-hero-nosotros .page-hero-inner{padding-top:26px;padding-bottom:34px;background:#10161B;}
+  /* celular: el texto va sobre el video, abajo, con sombra para que se lea */
+  .page-hero-nosotros{height:clamp(380px,105vw,460px);min-height:0;padding:0 0 30px;}
+  .page-hero-nosotros::before{background:linear-gradient(0deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.6) 38%,rgba(0,0,0,.05) 75%);}
+  .page-hero-nosotros .page-hero-inner{padding-top:0;padding-bottom:0;}
+  .page-hero-nosotros h1{font-size:40px;}
+  .page-hero-nosotros p:not(.kicker){font-size:16px;margin-top:12px;}
   .footer-bottom{padding-right:76px;}
 }
 @media (prefers-reduced-motion:reduce){
