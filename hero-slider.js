@@ -1,15 +1,16 @@
-/* Carrusel automático del banner del catálogo (productos.html)
+/* Carrusel automático del banner del catálogo (productos.html) y de Nosotros (nosotros.html)
    - Cambia de imagen cada INTERVALO ms con fundido suave
    - Se pausa al pasar el mouse / tocar y cuando la pestaña no está visible
    - Respeta "reducir movimiento" del sistema
    Para añadir o quitar imágenes edita el atributo data-slides en productos.html */
 (function () {
-  var INTERVALO = 5000; // milisegundos entre imágenes
-  var hero = document.querySelector('.cat-hero');
+  var INTERVALO = 5000; // milisegundos entre imágenes (se puede cambiar por página con data-interval)
+  var hero = document.querySelector('.cat-hero, .page-hero-nosotros');
   if (!hero) return;
   var cont = hero.querySelector('.cat-hero-slides');
   var dotsBox = hero.querySelector('.cat-hero-dots');
   if (!cont) return;
+  INTERVALO = parseInt(cont.getAttribute('data-interval'), 10) || INTERVALO;
 
   var urls = (cont.getAttribute('data-slides') || '').split(',')
     .map(function (s) { return s.trim(); }).filter(Boolean);

@@ -1,0 +1,198 @@
+/* ==========================================================================
+   FASTEC - Pantalla de carga (robot corriendo + barra de progreso)
+   Estilo de la marca: degradado azul, logo blanco, acento ámbar.
+   Se muestra al entrar a productos.html. Se controla con loader.js.
+   Colores: cambia las variables de .fx-loader para personalizarla.
+   ========================================================================== */
+
+.fx-loader{
+  --fx-blue-deep: #06142E;
+  --fx-blue-mid:  #0B3A8F;
+  --fx-blue:      #1E6FE0;
+  --fx-sky:       #7DB5FF;
+  --fx-amber:     #E8A33D;
+  --fx-text:      #FFFFFF;
+
+  position:fixed; inset:0; z-index:9999;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:34px;
+  padding:24px 56px;
+  color:var(--fx-text);
+  background:
+    radial-gradient(60% 50% at 50% 55%, rgba(30,111,224,.45) 0%, rgba(30,111,224,0) 70%),
+    linear-gradient(135deg, var(--fx-blue-deep) 0%, var(--fx-blue-mid) 55%, var(--fx-blue) 100%);
+  overflow:hidden;
+  transition:opacity .5s ease, visibility .5s ease, transform .5s ease;
+}
+/* cuadrícula técnica muy tenue */
+.fx-loader::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(circle at 50% 55%, #000 0%, transparent 72%);
+          mask-image:radial-gradient(circle at 50% 55%, #000 0%, transparent 72%);
+}
+.fx-loader > *{position:relative;}
+.fx-loader.fx-done{opacity:0; visibility:hidden; transform:scale(1.03);}
+.fx-skip .fx-loader{display:none;}
+.fx-loading{overflow:hidden;}
+
+/* Logo */
+.fx-brand{
+  width:min(210px, 60vw); height:auto; display:block;
+  animation:fx-rise .7s ease both;
+}
+@keyframes fx-rise{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;} }
+
+/* Zona robot + barra */
+.fx-stage{
+  position:relative;
+  width:min(480px, 100%);
+  padding-top:140px;           /* espacio para el robot sobre la barra */
+}
+
+/* Barra: riel delgado con brillo */
+.fx-bar{
+  position:relative;
+  height:8px;
+  border-radius:8px;
+  background:rgba(255,255,255,.16);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.fx-fill{
+  position:relative;
+  height:100%;
+  width:0;
+  border-radius:8px;
+  background:linear-gradient(90deg, var(--fx-blue) 0%, var(--fx-sky) 70%, #fff 100%);
+  box-shadow:0 0 16px rgba(125,181,255,.85), 0 0 4px rgba(255,255,255,.8);
+  overflow:hidden;
+}
+/* destello que recorre la parte llena */
+.fx-fill::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.65) 50%, transparent 70%);
+  background-size:120px 100%;
+  animation:fx-shine 1s linear infinite;
+}
+@keyframes fx-shine{ from{background-position:-120px 0;} to{background-position:480px 0;} }
+
+/* Robot (se mueve junto al final de la barra) */
+.fx-runner{
+  position:absolute;
+  top:6px;
+  left:0;                      /* lo actualiza loader.js */
+  width:150px;
+  margin-left:-75px;
+  pointer-events:none;
+  filter:drop-shadow(0 6px 10px rgba(2,10,30,.45));
+}
+.fx-robot{display:block; width:100%; height:auto; overflow:visible;}
+
+/* Texto: etiqueta + porcentaje */
+.fx-meta{
+  width:min(480px, 100%);
+  display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+  margin-top:-14px;
+}
+.fx-text{
+  margin:0;
+  font-family:var(--font-display, "Barlow Condensed", sans-serif);
+  font-weight:700;
+  font-size:clamp(20px, 4.4vw, 26px);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.fx-text i{font-style:normal; color:var(--fx-amber); animation:fx-dot 1.2s infinite both;}
+.fx-text i:nth-child(2){animation-delay:.2s;}
+.fx-text i:nth-child(3){animation-delay:.4s;}
+@keyframes fx-dot{ 0%,80%,100%{opacity:.2;} 40%{opacity:1;} }
+.fx-pct{
+  font-family:var(--font-mono, "Space Mono", monospace);
+  font-weight:700;
+  font-size:clamp(16px, 3.6vw, 20px);
+  color:var(--fx-sky);
+  min-width:4ch; text-align:right;
+}
+
+/* --------------------------- Animación del robot -------------------------
+   Ciclo de carrera con articulaciones: muslo + rodilla, brazo + codo.
+   Ángulo positivo = el miembro va hacia atrás; negativo = hacia adelante. */
+.fx-robot *{transform-box:view-box;}   /* los pivotes se dan en unidades del dibujo */
+
+.fx-lean{transform:rotate(6deg); transform-origin:90px 143px;}   /* inclinado hacia adelante */
+.fx-bob{animation:fx-bob .36s ease-in-out infinite;}
+@keyframes fx-bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3.5px);} }
+
+.fx-thigh{animation:fx-thigh .72s ease-in-out infinite;}
+.fx-thigh.a{transform-origin:94px 98px;}
+.fx-thigh.b{transform-origin:84px 98px; animation-delay:-.36s;}
+@keyframes fx-thigh{
+  0%,100%{transform:rotate(-48deg);}
+  50%{transform:rotate(36deg);}
+}
+.fx-shin{animation:fx-shin .72s ease-in-out infinite;}
+.fx-shin.a{transform-origin:94px 117px;}
+.fx-shin.b{transform-origin:84px 117px; animation-delay:-.36s;}
+@keyframes fx-shin{
+  0%{transform:rotate(12deg);}
+  25%{transform:rotate(16deg);}
+  50%{transform:rotate(46deg);}
+  75%{transform:rotate(100deg);}
+  100%{transform:rotate(12deg);}
+}
+.fx-uarm{transform-origin:90px 56px; animation:fx-uarm .72s ease-in-out infinite;}
+.fx-uarm.b{animation-delay:-.36s;}
+@keyframes fx-uarm{
+  0%,100%{transform:rotate(58deg);}
+  50%{transform:rotate(-55deg);}
+}
+.fx-farm{transform-origin:90px 70px; animation:fx-farm .72s ease-in-out infinite;}
+.fx-farm.b{animation-delay:-.36s;}
+@keyframes fx-farm{
+  0%,100%{transform:rotate(-40deg);}
+  50%{transform:rotate(-72deg);}
+}
+
+/* Ondas de señal de la antena */
+.fx-wave{opacity:0; animation:fx-wave 1s ease-out infinite;}
+.fx-wave.w2{animation-delay:.25s;}
+@keyframes fx-wave{ 0%{opacity:0;} 30%{opacity:1;} 100%{opacity:0;} }
+
+/* Líneas de velocidad detrás (como las del logo) */
+.fx-speed{stroke:#fff; stroke-linecap:round; opacity:0; animation:fx-speed .6s linear infinite;}
+.fx-speed.s2{animation-delay:.2s;}
+.fx-speed.s3{animation-delay:.4s;}
+@keyframes fx-speed{
+  0%{opacity:0; transform:translateX(8px);}
+  40%{opacity:.85;}
+  100%{opacity:0; transform:translateX(-14px);}
+}
+
+/* Luces: núcleo del pecho que respira, LEDs y parpadeo de ojos */
+.fx-led{animation:fx-led .6s steps(2,end) infinite;}
+@keyframes fx-led{ 50%{opacity:.35;} }
+.fx-core{animation:fx-core 1.2s ease-in-out infinite;}
+@keyframes fx-core{ 0%,100%{opacity:.75;} 50%{opacity:1;} }
+.fx-robot .fx-eye{transform-box:fill-box; transform-origin:center; animation:fx-blink 3.2s infinite;}
+@keyframes fx-blink{ 0%,92%,100%{transform:scaleY(1);} 96%{transform:scaleY(.1);} }
+
+/* Móvil */
+@media (max-width:480px){
+  .fx-loader{gap:28px;}
+  .fx-runner{width:120px; margin-left:-60px; top:5px;}
+  .fx-stage{padding-top:112px;}
+}
+
+/* Si el usuario prefiere menos movimiento: sin carrera, solo la barra */
+@media (prefers-reduced-motion:reduce){
+  .fx-bob,.fx-thigh,.fx-shin,.fx-uarm,.fx-farm,.fx-wave,.fx-speed,.fx-led,.fx-core,.fx-eye,.fx-fill::after,.fx-brand{animation:none;}
+  .fx-thigh.a{transform:rotate(-20deg);} .fx-thigh.b{transform:rotate(20deg);}
+  .fx-shin.a{transform:rotate(25deg);}   .fx-shin.b{transform:rotate(10deg);}
+  .fx-uarm.a{transform:rotate(30deg);}   .fx-uarm.b{transform:rotate(-30deg);}
+  .fx-farm{transform:rotate(-75deg);}
+  .fx-wave{opacity:1;}
+  .fx-loader{transition:none;}
+}

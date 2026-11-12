@@ -12,9 +12,9 @@
 
     <nav class="main-nav" id="mainNav" aria-label="Navegación principal">
       <a href="productos.html" data-page="productos.html">Productos</a>
-      <a href="nosotros.html" data-page="nosotros.html">Nosotros</a>
       <a href="servicios.html" data-page="servicios.html">Servicios</a>
       <a href="contacto.html" data-page="contacto.html">Contacto</a>
+      <a href="nosotros.html" data-page="nosotros.html">Nosotros</a>
     </nav>
 
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" type="button">
